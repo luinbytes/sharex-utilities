@@ -54,15 +54,63 @@ A comprehensive template for creating Raycast extensions on Windows with example
 - Windows-specific utilities
 - Type definitions
 
+### UI Utilities (`src/utils/ui.tsx`)
+- __LoadingDetail__ – Skeleton view with steps while async work is running.
+  - Props:
+    - `title?: string`
+    - `subtitle?: string`
+    - `navigationTitle?: string`
+    - `steps?: string[]`
+    - `currentStepIndex?: number`
+    - `actions?: ReactNode`
+  - Behavior:
+    - Steps are shown twice: as a compact TagList in metadata and as a full list in the markdown body to prevent truncation. Use longer, descriptive step text safely.
+  - Example:
+    ```tsx
+    <LoadingDetail
+      navigationTitle="ShareX"
+      title="Detecting ShareX Path"
+      subtitle="Resolving from preference and system..."
+      steps={["Preference override", "PATH lookup", "Registry query", "Common locations"]}
+      currentStepIndex={1}
+    />
+    ```
+
+  - __ResultDetail__ – Reusable success/failure/info result screen with Raycast-style metadata.
+    - Props:
+      - `markdown: string`
+      - `status: "success" | "failure" | "info"`
+      - `statusText?: string`
+      - `methodLabel?: string` – optional method description (e.g., "Preference override (validated)")
+      - `methodDescription?: string` – optional detailed explanation of how the method resolved the path. Rendered in the markdown body as a "Method Details" section to avoid metadata truncation.
+      - `source?: string` – optional source identifier
+      - `executablePath?: string` – optional path shown as a label
+      - `navigationTitle?: string`
+      - `actions?: ReactNode`
+    - Example:
+      ```tsx
+      <ResultDetail
+        navigationTitle="ShareX"
+        markdown="# ShareX: Open Main Window\n\nSuccessfully triggered ShareX."
+        status="success"
+        statusText="Launched"
+        methodLabel={resolved.methodLabel}
+        methodDescription={resolved.methodDescription}
+        source={resolved.source}
+        executablePath={resolved.path}
+      />
+      ```
+
 ## 🔧 ShareX Commands
 
 - __ShareX: Show Detected Path__ (`src/sharex-show-path.tsx`)
   - Resolves the ShareX executable path (preference override > auto-detect) and displays it.
+  - Shows Raycast-style status and method metadata via `ResultDetail`, including "Method" and "Method Details".
   - Actions: Copy path to clipboard.
 
 - __ShareX: Open Main Window__ (`src/sharex-open-main.tsx`)
   - Opens the ShareX main window using the resolved path.
-  - Shows success/failure toasts.
+  - Shows success/failure toasts and a `ResultDetail` with status, method, method details, and executable path.
 
 ## 🧩 ShareX Path Detection & CLI
 
@@ -80,11 +128,14 @@ This template includes ShareX-specific utilities in `src/utils/sharex.ts`:
 Example (inside a command):
 
 ```ts
-import { runShareX, resolveShareXPath } from "./utils/sharex";
+import { runShareX, resolveShareXPathDetailed } from "./utils/sharex";
 
-const path = await resolveShareXPath(Preferences.sharexPath);
-// e.g. trigger an action or open ShareX
-await runShareX(["-OpenMainWindow"], { pathHint: Preferences.sharexPath });
+const detailed = await resolveShareXPathDetailed(Preferences.sharexPath);
+if (!detailed.path) {
+  // handle not found
+}
+// e.g. trigger an action or open ShareX using the resolved path
+await runShareX(["-OpenMainWindow"], { pathHint: detailed.path });
 ```
 
 ## 📝 Customization Guide

@@ -104,14 +104,96 @@ export async function findShareXPath(): Promise<string | undefined> {
  * Resolve ShareX path given an optional manual hint (preference).
  * Validates the hint and falls back to auto-detection.
  */
-export async function resolveShareXPath(pathHint?: string): Promise<string | undefined> {
+export type ShareXPathSource = "preference" | "path" | "registry" | "defaults" | "none";
+
+export interface ResolvedShareXPath {
+  path?: string;
+  source: ShareXPathSource;
+  methodLabel: string;
+  methodDescription?: string;
+}
+
+function sourceLabel(source: ShareXPathSource): string {
+  switch (source) {
+    case "preference":
+      return "Preference override (validated)";
+    case "path":
+      return "PATH lookup (where ShareX.exe)";
+    case "registry":
+      return "Registry query (Uninstall keys)";
+    case "defaults":
+      return "Common install locations";
+    default:
+      return "Not found";
+  }
+}
+
+function sourceDescription(source: ShareXPathSource): string {
+  switch (source) {
+    case "preference":
+      return "User-specified path from extension preferences. Environment variables are expanded and the path is validated on disk.";
+    case "path":
+      return "Searched system PATH using 'where ShareX.exe'. Validates the first matching executable that exists on disk.";
+    case "registry":
+      return "Queried Windows Uninstall registry keys (HKLM 64-bit and WOW6432Node) via PowerShell, using InstallLocation or DisplayIcon to locate ShareX.exe.";
+    case "defaults":
+      return "Checked common install directories, including %ProgramFiles%, %ProgramFiles(x86)%, and %LocalAppData% user-scoped installs.";
+    default:
+      return "No installation found via preference override, PATH lookup, registry query, or common locations.";
+  }
+}
+
+export async function resolveShareXPathDetailed(pathHint?: string): Promise<ResolvedShareXPath> {
   if (pathHint) {
     const candidate = sanitizePath(expandEnv(pathHint));
     if (candidate.toLowerCase().endsWith("sharex.exe") && (await fileExists(candidate))) {
-      return candidate;
+      return {
+        path: candidate,
+        source: "preference",
+        methodLabel: sourceLabel("preference"),
+        methodDescription: sourceDescription("preference"),
+      };
     }
   }
-  return findShareXPath();
+
+  const fromWhere = await findFromWhere();
+  if (fromWhere)
+    return {
+      path: fromWhere,
+      source: "path",
+      methodLabel: sourceLabel("path"),
+      methodDescription: sourceDescription("path"),
+    };
+
+  const fromRegistry = await findFromRegistry();
+  if (fromRegistry)
+    return {
+      path: fromRegistry,
+      source: "registry",
+      methodLabel: sourceLabel("registry"),
+      methodDescription: sourceDescription("registry"),
+    };
+
+  const fromDefaults = await findFromDefaults();
+  if (fromDefaults)
+    return {
+      path: fromDefaults,
+      source: "defaults",
+      methodLabel: sourceLabel("defaults"),
+      methodDescription: sourceDescription("defaults"),
+    };
+
+  return {
+    path: undefined,
+    source: "none",
+    methodLabel: sourceLabel("none"),
+    methodDescription: sourceDescription("none"),
+  };
+}
+
+export async function resolveShareXPath(pathHint?: string): Promise<string | undefined> {
+  const { path } = await resolveShareXPathDetailed(pathHint);
+  return path;
 }
 
 function quoteArg(arg: string): string {

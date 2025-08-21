@@ -108,6 +108,11 @@ A comprehensive template for creating Raycast extensions on Windows with example
   - Shows Raycast-style status and method metadata via `ResultDetail`, including "Method" and "Method Details".
   - Actions: Copy path to clipboard.
 
+- __ShareX: Capture Region__ (`src/sharex-capture-region.tsx`)
+  - Triggers ShareX region capture overlay using CLI flag `-RectangleRegion`.
+  - Uses the same path resolution flow. Shows progress in `LoadingDetail` and full method details in `ResultDetail`.
+  - Action: Open ShareX CLI docs.
+
 - __ShareX: Open Main Window__ (`src/sharex-open-main.tsx`)
   - Opens the ShareX main window using the resolved path.
   - Shows success/failure toasts and a `ResultDetail` with status, method, method details, and executable path.

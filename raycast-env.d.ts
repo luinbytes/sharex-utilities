@@ -24,6 +24,8 @@ declare namespace Preferences {
   export type SharexOpenMain = ExtensionPreferences & {}
   /** Preferences accessible in the `sharex-show-path` command */
   export type SharexShowPath = ExtensionPreferences & {}
+  /** Preferences accessible in the `sharex-capture-region` command */
+  export type SharexCaptureRegion = ExtensionPreferences & {}
 }
 
 declare namespace Arguments {
@@ -35,5 +37,7 @@ declare namespace Arguments {
   export type SharexOpenMain = {}
   /** Arguments passed to the `sharex-show-path` command */
   export type SharexShowPath = {}
+  /** Arguments passed to the `sharex-capture-region` command */
+  export type SharexCaptureRegion = {}
 }
 

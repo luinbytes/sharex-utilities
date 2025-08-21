@@ -1,14 +1,12 @@
 import { Action, Toast, showToast, getPreferenceValues } from "@raycast/api";
-import React from "react";
-import { useEffect, useRef, useState } from "react";
-import { runShareX } from "./utils/sharex";
-import { showFailure } from "./utils";
+import React, { useEffect, useRef, useState } from "react";
+import { resolveShareXPathDetailed, type ResolvedShareXPath, runShareX } from "./utils/sharex";
 import { LoadingDetail, ResultDetail } from "./utils/ui";
-import { resolveShareXPathDetailed, type ResolvedShareXPath } from "./utils/sharex";
+import { showFailure } from "./utils";
 
-export default function ShareXOpenMainCommand() {
+export default function ShareXCaptureRegionCommand() {
   const [isLoading, setIsLoading] = useState(true);
-  const [resultText, setResultText] = useState("Running ShareX -OpenMainWindow...");
+  const [resultText, setResultText] = useState("Running ShareX -RectangleRegion...");
   const [resolved, setResolved] = useState<ResolvedShareXPath | undefined>(undefined);
   const [launched, setLaunched] = useState<boolean | undefined>(undefined);
   const ranRef = useRef(false);
@@ -21,15 +19,13 @@ export default function ShareXOpenMainCommand() {
         const prefs = getPreferenceValues<{ sharexPath?: string }>();
         const res = await resolveShareXPathDetailed(prefs.sharexPath?.trim());
         setResolved(res);
-        await runShareX(["-OpenMainWindow"], { pathHint: res.path });
-        await showToast({ style: Toast.Style.Success, title: "ShareX opened" });
-        setResultText("Successfully triggered ShareX main window.");
+        await runShareX(["-RectangleRegion"], { pathHint: res.path });
+        await showToast({ style: Toast.Style.Success, title: "Region capture triggered" });
+        setResultText("Region capture overlay should now be active.");
         setLaunched(true);
       } catch (error) {
-        await showFailure(error, { title: "Failed to open ShareX" });
-        setResultText(
-          "Failed to open ShareX main window. Ensure ShareX is installed or set its path in extension settings.",
-        );
+        await showFailure(error, { title: "Failed to trigger region capture" });
+        setResultText("Failed to trigger ShareX region capture. Ensure ShareX is installed or set its path in settings.");
         setLaunched(false);
       } finally {
         setIsLoading(false);
@@ -43,9 +39,9 @@ export default function ShareXOpenMainCommand() {
     return (
       <LoadingDetail
         navigationTitle="ShareX"
-        title="Opening ShareX"
-        subtitle="Running -OpenMainWindow..."
-        steps={["Resolve ShareX path", "Launch ShareX"]}
+        title="ShareX: Capture Region"
+        subtitle="Invoking -RectangleRegion..."
+        steps={["Resolve ShareX path", "Start region capture"]}
       />
     );
   }
@@ -53,16 +49,16 @@ export default function ShareXOpenMainCommand() {
   return (
     <ResultDetail
       navigationTitle="ShareX"
-      markdown={`# ShareX: Open Main Window\n\n${resultText}`}
+      markdown={`# ShareX: Capture Region\n\n${resultText}`}
       status={launched ? "success" : "failure"}
-      statusText={launched ? "Launched" : "Failed"}
+      statusText={launched ? "Triggered" : "Failed"}
       methodLabel={resolved?.methodLabel}
       methodDescription={resolved?.methodDescription}
       source={resolved?.source}
       executablePath={resolved?.path}
       actions={
         <>
-          <Action.OpenInBrowser title="ShareX Website" url="https://getsharex.com/" />
+          <Action.OpenInBrowser title="ShareX CLI Docs" url="https://getsharex.com/docs/command-line-arguments" />
         </>
       }
     />

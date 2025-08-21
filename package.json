@@ -53,6 +53,12 @@
       "title": "ShareX: Show Detected Path",
       "description": "Display detected ShareX.exe path and copy to clipboard",
       "mode": "view"
+    },
+    {
+      "name": "sharex-capture-region",
+      "title": "ShareX: Capture Region",
+      "description": "Capture a rectangular region using ShareX (-RectangleRegion)",
+      "mode": "view"
     }
   ],
   "dependencies": {

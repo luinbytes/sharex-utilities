@@ -1,0 +1,86 @@
+{
+  "$schema": "https://www.raycast.com/schemas/extension.json",
+  "name": "raycast-extension-template",
+  "title": "Raycast Extension Template",
+  "description": "A template for creating Raycast extensions on Windows with example commands and utilities.",
+  "icon": "command-icon.png",
+  "author": "your-raycast-username",
+  "categories": [
+    "Developer Tools"
+  ],
+  "license": "MIT",
+  "assets": [
+    "command-icon.png"
+  ],
+  "keywords": [
+    "template",
+    "boilerplate",
+    "windows",
+    "raycast",
+    "extension"
+  ],
+  "preferences": [
+    {
+      "name": "sharexPath",
+      "title": "ShareX Executable Path",
+      "type": "textfield",
+      "required": false,
+      "placeholder": "C:\\\\Program Files\\\\ShareX\\\\ShareX.exe",
+      "description": "Optional. If auto-detect fails, provide the full path to ShareX.exe (supports %ENV% variables)."
+    }
+  ],
+  "commands": [
+    {
+      "name": "example-command",
+      "title": "Example Command",
+      "description": "Shows how to create a basic detail view with actions",
+      "mode": "view"
+    },
+    {
+      "name": "list-command",
+      "title": "List Command Example",
+      "description": "Demonstrates list view with search and system integration",
+      "mode": "view"
+    },
+    {
+      "name": "sharex-open-main",
+      "title": "ShareX: Open Main Window",
+      "description": "Open ShareX main window (uses preference override if set)",
+      "mode": "view"
+    },
+    {
+      "name": "sharex-show-path",
+      "title": "ShareX: Show Detected Path",
+      "description": "Display detected ShareX.exe path and copy to clipboard",
+      "mode": "view"
+    }
+  ],
+  "dependencies": {
+    "@raycast/api": "^1.83.1",
+    "@raycast/utils": "^1.17.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "devDependencies": {
+    "@raycast/eslint-config": "^1.0.11",
+    "@types/node": "20.8.10",
+    "@types/react": "18.2.66",
+    "@types/react-dom": "18.2.22",
+    "eslint": "^8.57.0",
+    "prettier": "^3.2.5",
+    "typescript": "^5.4.5"
+  },
+  "overrides": {
+    "@types/react": "18.2.66",
+    "@types/react-dom": "18.2.22"
+  },
+  "scripts": {
+    "build": "ray build -e dist",
+    "dev": "ray develop",
+    "fix-lint": "ray lint --fix",
+    "lint": "ray lint",
+    "prepublishOnly": "echo \"\\n\\nIt seems like you are trying to publish the Raycast extension to npm.\\n\\nIf you did intend to publish it to npm, remove the \\`prepublishOnly\\` script and rerun \\`npm publish\\` again.\\nIf you wanted to publish it to the Raycast Store instead, use \\`npm run publish\\` instead.\\n\\n\" && exit 1",
+    "publish": "npx @raycast/api@latest publish"
+  },
+  "private": true
+}

@@ -26,6 +26,12 @@ declare namespace Preferences {
   export type SharexShowPath = ExtensionPreferences & {}
   /** Preferences accessible in the `sharex-capture-region` command */
   export type SharexCaptureRegion = ExtensionPreferences & {}
+  /** Preferences accessible in the `sharex-capture-fullscreen` command */
+  export type SharexCaptureFullscreen = ExtensionPreferences & {}
+  /** Preferences accessible in the `sharex-capture-active-window` command */
+  export type SharexCaptureActiveWindow = ExtensionPreferences & {}
+  /** Preferences accessible in the `sharex-capture-window` command */
+  export type SharexCaptureWindow = ExtensionPreferences & {}
 }
 
 declare namespace Arguments {
@@ -39,5 +45,11 @@ declare namespace Arguments {
   export type SharexShowPath = {}
   /** Arguments passed to the `sharex-capture-region` command */
   export type SharexCaptureRegion = {}
+  /** Arguments passed to the `sharex-capture-fullscreen` command */
+  export type SharexCaptureFullscreen = {}
+  /** Arguments passed to the `sharex-capture-active-window` command */
+  export type SharexCaptureActiveWindow = {}
+  /** Arguments passed to the `sharex-capture-window` command */
+  export type SharexCaptureWindow = {}
 }
 

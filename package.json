@@ -59,6 +59,24 @@
       "title": "ShareX: Capture Region",
       "description": "Capture a rectangular region using ShareX (-RectangleRegion)",
       "mode": "view"
+    },
+    {
+      "name": "sharex-capture-fullscreen",
+      "title": "ShareX: Capture Fullscreen",
+      "description": "Capture fullscreen using ShareX (-Fullscreen)",
+      "mode": "view"
+    },
+    {
+      "name": "sharex-capture-active-window",
+      "title": "ShareX: Capture Active Window",
+      "description": "Capture the active window using ShareX (-ActiveWindow)",
+      "mode": "view"
+    },
+    {
+      "name": "sharex-capture-window",
+      "title": "ShareX: Capture Window (Picker)",
+      "description": "Pick a window to capture using ShareX (-Window)",
+      "mode": "view"
     }
   ],
   "dependencies": {

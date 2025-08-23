@@ -113,6 +113,16 @@ A comprehensive template for creating Raycast extensions on Windows with example
   - Uses the same path resolution flow. Shows progress in `LoadingDetail` and full method details in `ResultDetail`.
   - Action: Open ShareX CLI docs.
 
+- __ShareX: Capture Fullscreen__ (`src/sharex-capture-fullscreen.tsx`)
+  - Captures fullscreen using `-PrintScreen`.
+  - Shows progress and method details similar to other commands.
+
+- __ShareX: Capture Active Window__ (`src/sharex-capture-active-window.tsx`)
+  - Captures the active window using `-ActiveWindow`.
+
+- __ShareX: Capture Window (Picker)__ (`src/sharex-capture-window.tsx`)
+  - Prompts to pick a window using `-CustomWindow`.
+
 - __ShareX: Open Main Window__ (`src/sharex-open-main.tsx`)
   - Opens the ShareX main window using the resolved path.
   - Shows success/failure toasts and a `ResultDetail` with status, method, method details, and executable path.
@@ -129,6 +139,8 @@ This template includes ShareX-specific utilities in `src/utils/sharex.ts`:
 - __Manual override__: If auto-detection fails, set the preference `ShareX Executable Path` (`sharexPath`) in the extension settings. You can use environment variables, e.g. `%LocalAppData%\Programs\ShareX\ShareX.exe`.
 
 - __CLI helper__: Use `runShareX(args, { pathHint, timeout })` to invoke ShareX safely.
+
+> Note: ShareX CLI flags correspond to HotkeyType names. For example, "Fullscreen" capture is `-PrintScreen`, and the window picker is `-CustomWindow`. Region capture is `-RectangleRegion`.
 
 Example (inside a command):
 
